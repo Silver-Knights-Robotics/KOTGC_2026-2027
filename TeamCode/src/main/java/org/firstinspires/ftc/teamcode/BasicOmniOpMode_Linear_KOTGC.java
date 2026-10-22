@@ -113,7 +113,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
             double axial   = -gamepad1.right_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.right_stick_x;
-            double yaw     =  gamepad1.left_stick_y;
+            double yaw     =  gamepad1.right_stick_x;
 
 
             if (gamepad1.dpad_left){
