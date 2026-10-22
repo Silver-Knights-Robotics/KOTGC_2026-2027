@@ -29,11 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -73,6 +75,8 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
+
+    private DcMotor launcher = null;
 
     @Override
     public void runOpMode() {
@@ -129,6 +133,11 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double frontRightPower = axial - lateral - yaw;
             double backLeftPower   = axial - lateral + yaw;
             double backRightPower  = axial + lateral - yaw;
+
+            if(gamepad1.right_trigger_pressed) {
+
+                launcher.setPower((launcher.getPower() + 0.01));
+            }
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
