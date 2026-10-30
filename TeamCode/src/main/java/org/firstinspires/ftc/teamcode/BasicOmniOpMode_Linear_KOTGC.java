@@ -73,7 +73,8 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
-
+    private DcMotor launcher = null;
+    private DcMotor FunniArm = null;
     @Override
     public void runOpMode() {
 
@@ -83,7 +84,8 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-
+        launcher = hardwareMap.get(DcMotor.class, "launched");
+        FunniArm = hardwareMap.get(DcMotor.class, "main_arm")
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
         // ########################################################################################
@@ -98,7 +100,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-
+        launcher.setDirection(DcMotor.Direction.FORWARD);
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -115,7 +117,12 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double lateral =  gamepad1.right_stick_x;
             double yaw     =  gamepad1.right_stick_x;
 
-
+            if (gamepad1.left_bumper){
+                axial = 1
+            }
+            if (gamepad1.left_trigger_pressed){
+                axial = 0
+            }
             if (gamepad1.dpad_left){
                 lateral = -1;
             }
@@ -129,18 +136,19 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double frontRightPower = axial - lateral - yaw;
             double backLeftPower   = axial - lateral + yaw;
             double backRightPower  = axial + lateral - yaw;
-
+            double launcherPower = axial + lateral - yaw;
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
             max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
             max = Math.max(max, Math.abs(backLeftPower));
             max = Math.max(max, Math.abs(backRightPower));
-
+            max = Math.max(max,Math.abs(launcherPower));
             if (max > 1.0) {
                 frontLeftPower  /= max;
                 frontRightPower /= max;
                 backLeftPower   /= max;
                 backRightPower  /= max;
+                launcherPower /= max;
             }
 
             // This is test code:
@@ -153,18 +161,19 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             //      the setDirection() calls above.
             // Once the correct motors move in the correct direction re-comment this code.
 
-            /*
+
             frontLeftPower  = gamepad1.x ? 1.0 : 0.0;  // X gamepad
             backLeftPower   = gamepad1.a ? 1.0 : 0.0;  // A gamepad
             frontRightPower = gamepad1.y ? 1.0 : 0.0;  // Y gamepad
             backRightPower  = gamepad1.b ? 1.0 : 0.0;  // B gamepad
-            */
+
 
             // Send calculated power to wheels
             frontLeftDrive.setPower(frontLeftPower);
             frontRightDrive.setPower(frontRightPower);
             backLeftDrive.setPower(backLeftPower);
             backRightDrive.setPower(backRightPower);
+            launcher.setPower(launcherPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
