@@ -85,7 +85,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
         launcher = hardwareMap.get(DcMotor.class, "launched");
-        FunniArm = hardwareMap.get(DcMotor.class, "main_arm")
+        FunniArm = hardwareMap.get(DcMotor.class, "main_arm");
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
         // ########################################################################################
@@ -118,10 +118,10 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double yaw     =  gamepad1.right_stick_x;
 
             if (gamepad1.left_bumper){
-                axial = 1
+                axial = 1;
             }
             if (gamepad1.left_trigger_pressed){
-                axial = 0
+                axial = 0;
             }
             if (gamepad1.dpad_left){
                 lateral = -1;
