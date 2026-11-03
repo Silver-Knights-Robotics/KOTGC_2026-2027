@@ -80,7 +80,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
     private DcMotor launcher = null;
 
 
-    private DcMotor launcher = null;
+    
     private DcMotor FunniArm = null;
 
     @Override
