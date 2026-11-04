@@ -125,12 +125,8 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double lateral =  gamepad1.right_stick_x;
             double yaw     =  gamepad1.right_stick_x;
 
-            if (gamepad1.left_bumper){
-                axial = 1;
-            }
-            if (gamepad1.left_trigger_pressed){
-                axial = 0;
-            }
+
+
             if (gamepad1.dpad_left){
                 lateral = -1;
             }
@@ -150,9 +146,12 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
 
                 launcher.setPower((launcher.getPower() + 0.01));
             }
+            if(gamepad1.right_bumper) {
 
+                FunniArm.setPower((FunniArm.getPower() + 0.01));
+            }
             double launcherPower = axial + lateral - yaw;
-
+            double funniPower = axial + lateral - yaw;
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
             max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
@@ -165,6 +164,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
                 backLeftPower  /= max;
                 backRightPower /= max;
                 launcherPower /= max;
+                funniPower /= max;
             }
 
             // This is test code:
@@ -190,6 +190,12 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             backLeftDrive.setPower(backLeftPower);
             backRightDrive.setPower(backRightPower);
             launcher.setPower(launcherPower);
+
+            if (gamepad1.left_bumper){
+                axial = 1;
+            }
+
+
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
