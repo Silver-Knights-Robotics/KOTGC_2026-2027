@@ -36,6 +36,21 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagClusterDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagClusterDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
+
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -92,7 +107,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-        launcher = hardwareMap.get(DcMotor.class, "launched");
+        launcher = hardwareMap.get(DcMotor.class, "launcher");
         FunniArm = hardwareMap.get(DcMotor.class, "main_arm");
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -195,6 +210,54 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
                 axial = 1;
             }
 
+
+
+            @TeleOp(name = "BIOBUZZ AprilTag Cluster", group = "Vision")
+            class BiobuzzAprilTagOpMode extends LinearOpMode {
+
+                private AprilTagProcessor aprilTag;
+                private VisionPortal visionPortal;
+
+                @Override
+                public void runOpMode() {
+                    // 1. Initialize the AprilTagProcessor (uses SDK 12.0+ BIOBUZZ library by default)
+                    aprilTag = new AprilTagProcessor.Builder()
+                            .setDrawAxes(true)
+                            .setDrawTagID(true)
+                            .build();
+
+                    // 2. Initialize the VisionPortal with your configured webcam
+                    visionPortal = new VisionPortal.Builder()
+                            .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                            .addProcessor(aprilTag)
+                            .build();
+
+                    waitForStart();
+
+                    while (opModeIsActive()) {
+                        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+                        for (AprilTagDetection detection : currentDetections) {
+                            // In BIOBUZZ, detections return as AprilTagClusterDetection
+                            if (detection instanceof AprilTagClusterDetection) {
+                                AprilTagClusterDetection cluster = (AprilTagClusterDetection) detection;
+
+                                // Pose points directly to the center of the HIVE CELL opening
+                                double x = cluster.ftcPose.x;     // Left/Right offset (inches)
+                                double y = cluster.ftcPose.y;     // Forward distance (inches)
+                                double z = cluster.ftcPose.z;     // Vertical height (inches)
+                                double yaw = cluster.ftcPose.yaw; // Angle offset (degrees)
+
+
+                                telemetry.addData("XYZ (in)", "%.1f, %.1f, %.1f", x, y, z);
+                                telemetry.addData("Yaw (deg)", "%.1f", yaw);
+                            }
+                        }
+                        telemetry.update();
+                    }
+                    visionPortal.close();
+                }
+            }
 
 
             // Show the elapsed game time and wheel power.
