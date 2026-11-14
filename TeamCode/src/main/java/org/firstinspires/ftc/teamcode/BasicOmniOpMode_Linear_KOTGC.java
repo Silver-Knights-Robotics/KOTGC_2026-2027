@@ -127,13 +127,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
 
 
 
-            if (gamepad1.dpad_left){
-                lateral = -1;
-            }
 
-            if (gamepad1.dpad_right){
-                lateral = 1;
-            }
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
             double frontLeftPower  = axial + lateral + yaw;
@@ -141,30 +135,24 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double backLeftPower   = axial - lateral + yaw;
             double backRightPower  = axial + lateral - yaw;
 
-
-            if(gamepad1.right_trigger_pressed) {
-
-                launcher.setPower((launcher.getPower() + 0.01));
-            }
+            
             if(gamepad1.right_bumper) {
 
-                FunniArm.setPower((FunniArm.getPower() + 0.01));
+                    FunniArm.setPower((FunniArm.getPower() + 0.01));
             }
-            double launcherPower = axial + lateral - yaw;
-            double funniPower = axial + lateral - yaw;
+
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
             max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
             max = Math.max(max, Math.abs(backLeftPower));
             max = Math.max(max, Math.abs(backRightPower));
-            max = Math.max(max,Math.abs(launcherPower));
+
             if (max > 1.0) {
                 frontLeftPower  /= max;
                 frontRightPower /= max;
                 backLeftPower  /= max;
                 backRightPower /= max;
-                launcherPower /= max;
-                funniPower /= max;
+
             }
 
             // This is test code:
@@ -189,13 +177,9 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             frontRightDrive.setPower(frontRightPower);
             backLeftDrive.setPower(backLeftPower);
             backRightDrive.setPower(backRightPower);
-            launcher.setPower(launcherPower);
-
-            if (gamepad1.left_bumper){
-                axial = 1;
-            }
 
 
+            launcher.setPower(gamepad1.right_trigger);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
