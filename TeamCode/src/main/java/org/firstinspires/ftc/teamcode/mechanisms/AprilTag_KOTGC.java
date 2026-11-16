@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.mechanisms;
+/*package org.firstinspires.ftc.teamcode.mechanisms;
 
 import android.util.Size;
 
@@ -52,7 +52,8 @@ public class AprilTag_KOTGC {
         return detectedTags;
     }
 
-    public AprilTagDetection getTagBySpecificId(int id) {
+
+    /*public AprilTagDetection getTagBySpecificId(int id) {
         for (AprilTagDetection detection : detectedTags) {
             if (detection.id == id){
                 return detection;
@@ -67,3 +68,4 @@ public class AprilTag_KOTGC {
     }
 }
 
+*/
