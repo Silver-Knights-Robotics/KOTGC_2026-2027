@@ -91,14 +91,10 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
-
-
-    private DcMotor launcher = null;
-
-
-
+    private DcMotor launcher2 = null;
+    private DcMotor launcher1 = null;
     private DcMotor FunniArm = null;
-
+    private DcMotor intake = null;
     @Override
     public void runOpMode() {
 
@@ -108,8 +104,10 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-        launcher = hardwareMap.get(DcMotor.class, "launcher");
+        launcher1 = hardwareMap.get(DcMotor.class, "launcher1");
         FunniArm = hardwareMap.get(DcMotor.class, "main_arm");
+        launcher2 = hardwareMap.get(DcMotor.class, "launcher2");
+        intake = hardwareMap.get(DcMotor.class, "intake");
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
         // ########################################################################################
@@ -124,7 +122,9 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        launcher.setDirection(DcMotor.Direction.FORWARD);
+        launcher1.setDirection(DcMotor.Direction.FORWARD);
+        launcher2.setDirection(DcMotor.Direction.REVERSE);
+        intake.setDirection(DcMotor.Direction.REVERSE);
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -152,10 +152,8 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double backRightPower  = axial + lateral - yaw;
 
             
-            if(gamepad1.right_bumper) {
+            intake.setPower(100);
 
-                    FunniArm.setPower((FunniArm.getPower() + 0.01));
-            }
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
@@ -195,8 +193,8 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             backRightDrive.setPower(backRightPower);
 
 
-            launcher.setPower(gamepad1.right_trigger);
-
+            launcher1.setPower(gamepad1.left_trigger);
+            launcher2.setPower(gamepad1.right_trigger);
             @TeleOp(name = "BIOBUZZ AprilTag Cluster", group = "Vision")
             class BiobuzzAprilTagOpMode extends LinearOpMode {
 
