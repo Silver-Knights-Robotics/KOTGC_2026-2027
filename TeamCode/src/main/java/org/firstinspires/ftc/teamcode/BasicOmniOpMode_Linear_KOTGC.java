@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -95,6 +96,8 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
     private DcMotor launcher1 = null;
     private DcMotor FunniArm = null;
     private DcMotor intake = null;
+    private Servo servo1 = null;
+    private Servo servo2 = null;
     @Override
     public void runOpMode() {
 
@@ -150,7 +153,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double frontRightPower = axial - lateral - yaw;
             double backLeftPower   = axial - lateral + yaw;
             double backRightPower  = axial + lateral - yaw;
-
+            double FunniArmPower = axial + lateral - yaw;
             
             intake.setPower(100);
 
@@ -169,6 +172,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
 
             }
 
+
             // This is test code:
             //
             // Uncomment the following code to test your motor directions.
@@ -179,11 +183,12 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             //      the setDirection() calls above.
             // Once the correct motors move in the correct direction re-comment this code.
 
-
+            /*
             frontLeftPower  = gamepad1.x ? 1.0 : 0.0;  // X gamepad
             backLeftPower   = gamepad1.a ? 1.0 : 0.0;  // A gamepad
             frontRightPower = gamepad1.y ? 1.0 : 0.0;  // Y gamepad
             backRightPower  = gamepad1.b ? 1.0 : 0.0;  // B gamepad
+            */
 
 
             // Send calculated power to wheels
@@ -192,7 +197,9 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             backLeftDrive.setPower(backLeftPower);
             backRightDrive.setPower(backRightPower);
 
-
+            if(gamepad1.dpad_up){
+                FunniArm.setPower((FunniArm.getPower() + 0.01));
+            }
             launcher1.setPower(gamepad1.left_trigger);
             launcher2.setPower(gamepad1.right_trigger);
             @TeleOp(name = "BIOBUZZ AprilTag Cluster", group = "Vision")
