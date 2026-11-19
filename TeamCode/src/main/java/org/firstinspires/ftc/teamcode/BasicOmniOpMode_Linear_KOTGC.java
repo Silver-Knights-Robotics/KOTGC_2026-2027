@@ -126,7 +126,7 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         launcher1.setDirection(DcMotor.Direction.FORWARD);
-        launcher2.setDirection(DcMotor.Direction.REVERSE);
+        launcher2.setDirection(DcMotor.Direction.REVERSE );
         intake.setDirection(DcMotor.Direction.REVERSE);
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
@@ -140,9 +140,9 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double max;
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-            double axial   = -gamepad1.right_stick_y;  // Note: pushing stick forward gives negative value
-            double lateral =  gamepad1.right_stick_x;
-            double yaw     =  gamepad1.right_stick_x;
+            double axial   = -gamepad1.right_stick_y  ;  // Note: pushing stick forward gives negative value
+            double lateral =  gamepad1.right_stick_y; 
+            double yaw     =  gamepad1.right_stick_y;
 
 
 
@@ -153,11 +153,13 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
             double frontRightPower = axial - lateral - yaw;
             double backLeftPower   = axial - lateral + yaw;
             double backRightPower  = axial + lateral - yaw;
-            double FunniArmPower = axial + lateral - yaw;
-            
-            intake.setPower(100);
 
-
+            if(gamepad1.y) {
+                intake.setPower(100);
+            }
+            if(gamepad1.b) {
+                intake.setPower(0);
+            }
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
             max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
@@ -199,6 +201,10 @@ public class BasicOmniOpMode_Linear_KOTGC extends LinearOpMode {
 
             if(gamepad1.dpad_up){
                 FunniArm.setPower((FunniArm.getPower() + 0.01));
+            }
+            if(gamepad1.dpad_down){
+                FunniArm.setPower((FunniArm.getPower() - 0.01));
+
             }
             launcher1.setPower(gamepad1.left_trigger);
             launcher2.setPower(gamepad1.right_trigger);
